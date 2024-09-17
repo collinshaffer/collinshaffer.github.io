@@ -6,5 +6,24 @@
   <body>
     <h1>Le web page premier</h1>
     <p>Lorem Ipsum</p>
+    <div>
+      <h2>For security purposes, do not fill out this form with real data.</h2>
+      <p>
+        The following form is for testing the extent of html form capabilities without the additional use of css, JS or any additional programming language.
+        Inputting real personal or sensitive data would be a silly thing to do; so please do not do that.
+      </p>
+      <form id="form-contact" name="form_contact" action="#" method="post">
+        <input type=hidden id="hidden" name="hidden" autocomplete="section-contact hidden" />
+        <input type=text id="given-name" name="given_name" autocomplete="section-contact given-name" />
+        <input type=text id="additional-name" name="additional_name" autocomplete="section-contact additional-name" />
+        <input type="text" id="family-name" name="family_name" autocomplete="section-contact family-name" />
+        <input type="text" id="nickname" name="nickname" autocomplete="section-contact nickname" />
+        <input type=email id="email" name="email" autocomplete="section-contact email" />
+
+        
+        
+        <textfield id="body" name="body" minlength="5" maxlength="1000" placeholder="E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs..." />
+      </form>
+    </div>
   </body>
 </html>
