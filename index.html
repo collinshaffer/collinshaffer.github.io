@@ -55,11 +55,10 @@
         "url",
         "photo",
       ].forEach(hyphenatedName => {
-        let el = document
-          .createElement('input')
-          .setAttribute('id', hyphenatedName)
-          .setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'))
-          .setAttribute('autocomplete', `section-contact ${hyphenatedName}`);
+        let el = document.createElement('input');
+        el.setAttribute('id', hyphenatedName);
+        el.setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'));
+        el.setAttribute('autocomplete', `section-contact ${hyphenatedName}`);
         
         if (hyphenatedName === 'url') el.setAttribute('type', 'url');
         else if (hyphenatedName.includes('password')) el.setAttribute('type', 'password');
@@ -69,16 +68,13 @@
         contactForm.appendChild(el);
       });
 
-      contactForm
-        .appendChild(
-          document
-            .createElement('textarea')
-            .setAttribute('id', 'form-body')
-            .setAttribute('name', 'form_content')
-            .setAttribute('minlength', '5')
-            .setAttribute('maxlength', '1000')
-            .setAttribute('placeholder', 'E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs...')
-        );
+      const textArea = document.createElement('textarea');
+      textArea.setAttribute('id', 'form-body');
+      textArea.setAttribute('name', 'form_content');
+      textArea.setAttribute('minlength', '5');
+      textArea.setAttribute('maxlength', '1000');
+      textArea.setAttribute('placeholder', 'E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs...');
+      contactForm.appendChild(textArea);
 
       document.getElementById('silly-form').appendChild(contactForm);
     </script>
