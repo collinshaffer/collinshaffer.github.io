@@ -5,11 +5,12 @@
     <script>
       window.onload = function() {
         // make the form
-        const contactForm = document.createElement('form');
-        contactForm.setAttribute('id', 'contact-form');
-        contactForm.setAttribute('name', 'contact_form');
-        contactForm.setAttribute('action', '#');
-        contactForm.setAttribute('method', 'post');
+        const contactForm = document
+          .createElement('form')
+          .setAttribute('id', 'contact-form')
+          .setAttribute('name', 'contact_form')
+          .setAttribute('action', '#')
+          .setAttribute('method', 'post');
 
         // personal info fields
         const autofillFieldNames = [
