@@ -4,13 +4,15 @@
     <title>Collin Shaffer | GitHub</title>
     <script>
       window.onload = function() {
+        // make the form
         const contactForm = document.createElement('form');
         contactForm.setAttribute('id', 'contact-form');
         contactForm.setAttribute('name', 'contact_form');
         contactForm.setAttribute('action', '#');
         contactForm.setAttribute('method', 'post');
 
-        [
+        // personal info fields
+        const autofillFieldNames = [
           "name",
           "honorific-prefix",
           "given-name",
@@ -55,7 +57,8 @@
           "sex",
           "url",
           "photo",
-        ].forEach(hyphenatedName => {
+        ];
+        autofillFieldNames.forEach(hyphenatedName => {
           let el = document.createElement('input');
           el.setAttribute('id', hyphenatedName);
           el.setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'));
@@ -69,6 +72,43 @@
           contactForm.appendChild(el);
         });
 
+        // contact fields
+        const contactTypes = [
+          'home',
+          'work',
+          'mobile',
+          'fax',
+          'pager',
+        ];
+        const contactFieldNames = [
+          "tel",
+          "tel-country-code",
+          "tel-national",
+          "tel-area-code",
+          "tel-local",
+          "tel-local-prefix",
+          "tel-local-suffix",
+          "tel-extension",
+          "email",
+          "impp",
+        ];
+        contactTypes.forEach(contactType => {
+          contactFieldNames.forEach(hyphenatedName => {
+            let el = document.createElement('input');
+            el.setAttribute('id', hyphenatedName);
+            el.setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'));
+            el.setAttribute('autocomplete', `section-contact ${contactType} ${hyphenatedName}`);
+            
+            if (hyphenatedName === 'url') el.setAttribute('type', 'url');
+            else if (hyphenatedName.includes('password')) el.setAttribute('type', 'password');
+            else if (hyphenatedName === 'bday') el.setAttribute('type', 'date');
+            else el.setAttribute('type', 'text');
+
+            contactForm.appendChild(el);
+          });
+        });
+
+        // place longer format response
         const textArea = document.createElement('textarea');
         textArea.setAttribute('id', 'form-body');
         textArea.setAttribute('name', 'form_content');
@@ -77,6 +117,7 @@
         textArea.setAttribute('placeholder', 'E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs...');
         contactForm.appendChild(textArea);
 
+        // add the form
         document.getElementById('silly-form').appendChild(contactForm);
       };
     </script>
