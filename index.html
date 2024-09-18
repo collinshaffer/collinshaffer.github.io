@@ -1,69 +1,106 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Collin Shaffer | GitHub</title>
-    <script>
-      window.onload = function() {
-        // make the form
-        const contactForm = (document.createElement('form'))
-          .setAttribute('id', 'contact-form')
-          .setAttribute('name', 'contact_form')
-          .setAttribute('action', '#')
-          .setAttribute('method', 'post');
 
-        // personal info fields
-        const autofillFieldNames = [
-          "name",
-          "honorific-prefix",
-          "given-name",
-          "additional-name",
-          "family-name",
-          "honorific-suffix",
-          "nickname",
-          "username",
-          "new-password",
-          "current-password",
-          "one-time-code",
-          "organization-title",
-          "organization",
-          "street-address",
-          "address-line1",
-          "address-line2",
-          "address-line3",
-          "address-level4",
-          "address-level3",
-          "address-level2",
-          "address-level1",
-          "country",
-          "country-name",
-          "postal-code",
-          "cc-name",
-          "cc-given-name",
-          "cc-additional-name",
-          "cc-family-name",
-          "cc-number",
-          "cc-exp",
-          "cc-exp-month",
-          "cc-exp-year",
-          "cc-csc",
-          "cc-type",
-          "transaction-currency",
-          "transaction-amount",
-          "language",
-          "bday",
-          "bday-day",
-          "bday-month",
-          "bday-year",
-          "sex",
-          "url",
-          "photo",
-        ];
-        autofillFieldNames.forEach(hyphenatedName => {
+<head>
+  <title>Collin Shaffer | GitHub</title>
+  <script>
+    window.onload = function () {
+      // make the form
+      let contactForm = document
+        .createElement('form')
+        .setAttribute('id', 'contact-form')
+        .setAttribute('name', 'contact_form')
+        .setAttribute('action', '#')
+        .setAttribute('method', 'post');
+
+      // personal info fields
+      const autofillFieldNames = [
+        "name",
+        "honorific-prefix",
+        "given-name",
+        "additional-name",
+        "family-name",
+        "honorific-suffix",
+        "nickname",
+        "username",
+        "new-password",
+        "current-password",
+        "one-time-code",
+        "organization-title",
+        "organization",
+        "street-address",
+        "address-line1",
+        "address-line2",
+        "address-line3",
+        "address-level4",
+        "address-level3",
+        "address-level2",
+        "address-level1",
+        "country",
+        "country-name",
+        "postal-code",
+        "cc-name",
+        "cc-given-name",
+        "cc-additional-name",
+        "cc-family-name",
+        "cc-number",
+        "cc-exp",
+        "cc-exp-month",
+        "cc-exp-year",
+        "cc-csc",
+        "cc-type",
+        "transaction-currency",
+        "transaction-amount",
+        "language",
+        "bday",
+        "bday-day",
+        "bday-month",
+        "bday-year",
+        "sex",
+        "url",
+        "photo",
+      ];
+      autofillFieldNames.forEach(hyphenatedName => {
+        let el = document.createElement('input');
+        el.setAttribute('id', hyphenatedName);
+        el.setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'));
+        el.setAttribute('autocomplete', `section-contact ${hyphenatedName}`);
+
+        if (hyphenatedName === 'url') el.setAttribute('type', 'url');
+        else if (hyphenatedName.includes('password')) el.setAttribute('type', 'password');
+        else if (hyphenatedName === 'bday') el.setAttribute('type', 'date');
+        else el.setAttribute('type', 'text');
+
+        contactForm.appendChild(el);
+      });
+
+      // contact fields
+      const contactTypes = [
+        'home',
+        'work',
+        'mobile',
+        'fax',
+        'pager',
+      ];
+      const contactFieldNames = [
+        "tel",
+        "tel-country-code",
+        "tel-national",
+        "tel-area-code",
+        "tel-local",
+        "tel-local-prefix",
+        "tel-local-suffix",
+        "tel-extension",
+        "email",
+        "impp",
+      ];
+      contactTypes.forEach(contactType => {
+        contactFieldNames.forEach(hyphenatedName => {
           let el = document.createElement('input');
           el.setAttribute('id', hyphenatedName);
           el.setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'));
-          el.setAttribute('autocomplete', `section-contact ${hyphenatedName}`);
-          
+          el.setAttribute('autocomplete', `section-contact ${contactType} ${hyphenatedName}`);
+
           if (hyphenatedName === 'url') el.setAttribute('type', 'url');
           else if (hyphenatedName.includes('password')) el.setAttribute('type', 'password');
           else if (hyphenatedName === 'bday') el.setAttribute('type', 'date');
@@ -71,66 +108,34 @@
 
           contactForm.appendChild(el);
         });
+      });
 
-        // contact fields
-        const contactTypes = [
-          'home',
-          'work',
-          'mobile',
-          'fax',
-          'pager',
-        ];
-        const contactFieldNames = [
-          "tel",
-          "tel-country-code",
-          "tel-national",
-          "tel-area-code",
-          "tel-local",
-          "tel-local-prefix",
-          "tel-local-suffix",
-          "tel-extension",
-          "email",
-          "impp",
-        ];
-        contactTypes.forEach(contactType => {
-          contactFieldNames.forEach(hyphenatedName => {
-            let el = document.createElement('input');
-            el.setAttribute('id', hyphenatedName);
-            el.setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'));
-            el.setAttribute('autocomplete', `section-contact ${contactType} ${hyphenatedName}`);
-            
-            if (hyphenatedName === 'url') el.setAttribute('type', 'url');
-            else if (hyphenatedName.includes('password')) el.setAttribute('type', 'password');
-            else if (hyphenatedName === 'bday') el.setAttribute('type', 'date');
-            else el.setAttribute('type', 'text');
+      // place longer format response
+      const textArea = document.createElement('textarea');
+      textArea.setAttribute('id', 'form-body');
+      textArea.setAttribute('name', 'form_content');
+      textArea.setAttribute('minlength', '5');
+      textArea.setAttribute('maxlength', '1000');
+      textArea.setAttribute('placeholder', 'E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs...');
+      contactForm.appendChild(textArea);
 
-            contactForm.appendChild(el);
-          });
-        });
+      // add the form
+      document.getElementById('silly-form').appendChild(contactForm);
+    };
+  </script>
+</head>
 
-        // place longer format response
-        const textArea = document.createElement('textarea');
-        textArea.setAttribute('id', 'form-body');
-        textArea.setAttribute('name', 'form_content');
-        textArea.setAttribute('minlength', '5');
-        textArea.setAttribute('maxlength', '1000');
-        textArea.setAttribute('placeholder', 'E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs...');
-        contactForm.appendChild(textArea);
+<body>
+  <h1>Le web page premier</h1>
+  <p>Lorem Ipsum</p>
+  <div id="silly-form">
+    <h2>For security purposes, do not fill out this form with real data.</h2>
+    <p>
+      The following form is for testing the extent of html form capabilities without the additional use of css, JS or
+      any additional programming language.
+      Inputting real personal or sensitive data would be a silly thing to do; so please do not do that.
+    </p>
+  </div>
+</body>
 
-        // add the form
-        document.getElementById('silly-form').appendChild(contactForm);
-      };
-    </script>
-  </head>
-  <body>
-    <h1>Le web page premier</h1>
-    <p>Lorem Ipsum</p>
-    <div id="silly-form">
-      <h2>For security purposes, do not fill out this form with real data.</h2>
-      <p>
-        The following form is for testing the extent of html form capabilities without the additional use of css, JS or any additional programming language.
-        Inputting real personal or sensitive data would be a silly thing to do; so please do not do that.
-      </p>
-    </div>
-  </body>
 </html>
