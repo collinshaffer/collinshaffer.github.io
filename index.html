@@ -56,16 +56,16 @@
         "url",
         "photo",
       ].forEach(hyphenatedName => {
-        let el = new HTMLInputElement();
+        let el = document
+          .createElement('input')
+          .setAttribute('id', hyphenatedName)
+          .setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'))
+          .setAttribute('autocomplete', `section-contact ${hyphenatedName}`);
         
-        if (hyphenatedName === 'url') el.type = 'url';
-        else if (hyphenatedName.includes('password')) el.type = 'password';
-        else if (hyphenatedName === 'bday') el.type = 'date';
-        else el.type = 'text';
-
-        el.id = hyphenatedName;
-        el.name = !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_');
-        el.autocomplete = `section-contact ${hyphenatedName}`;
+        if (hyphenatedName === 'url') el.setAttribute('type', 'url');
+        else if (hyphenatedName.includes('password')) el.setAttribute('type', 'password');
+        else if (hyphenatedName === 'bday') el.setAttribute('type', 'date');
+        else el.setAttribute('type', 'text');
 
         contactForm.appendChild(el);
       });
