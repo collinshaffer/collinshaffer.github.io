@@ -73,7 +73,7 @@
     ];
 
     // webauthn
-    const webauthnOpts = ['', 'webauthn'];
+    const webauthnOpts = [null, 'webauthn'];
 
     // for easy creation/assignment of multiple attributes
     function createElementWithAttributes(tagName, attrsObj) {
@@ -105,13 +105,13 @@
     }
 
     function addInputSets(section, types, names) {
-      // TODO: make the fieldset label say the section-type
-      // TODO: add labels
+      // TODO: add labels for elements
+      // TODO: add an iteration for webauthnOpts
       types.forEach(type => {
         // first make the fieldset
         let fieldSet = document.createElement('fieldset'),
           legend = document.createElement('legend');
-        legend.innerHTML = getInputLabel(type ?? section);
+        legend.innerHTML = getInputLabel(section) +(type ? '-'+getInputLabel(type) : '');
         fieldSet.appendChild(legend);
 
         // then add the elements
