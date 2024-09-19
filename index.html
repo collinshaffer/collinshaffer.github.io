@@ -84,9 +84,9 @@
 
     // based on hyphenated field names... and wizardry.
     function getInputType(fieldName) {
-      if (hyphenatedName === 'url') return 'url';
-      if (hyphenatedName.includes('password')) return 'password';
-      if (hyphenatedName === 'bday') return 'date';
+      if (fieldName === 'url') return 'url';
+      if (fieldName === 'bday') return 'date';
+      if (fieldName.includes('password')) return 'password';
       return 'text';
     }
     
