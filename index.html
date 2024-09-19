@@ -4,121 +4,149 @@
 <head>
   <title>Collin Shaffer | GitHub</title>
   <script>
-    window.onload = function () {
-      // make the form
-      let contactForm = document
-        .createElement('form')
-        .setAttribute('id', 'contact-form')
-        .setAttribute('name', 'contact_form')
-        .setAttribute('action', '#')
-        .setAttribute('method', 'post');
+    // personal info fields
+    const autofillFieldNames = [
+      "name",
+      "honorific-prefix",
+      "given-name",
+      "additional-name",
+      "family-name",
+      "honorific-suffix",
+      "nickname",
+      "username",
+      "new-password",
+      "current-password",
+      "one-time-code",
+      "organization-title",
+      "organization",
+      "street-address",
+      "address-line1",
+      "address-line2",
+      "address-line3",
+      "address-level4",
+      "address-level3",
+      "address-level2",
+      "address-level1",
+      "country",
+      "country-name",
+      "postal-code",
+      "cc-name",
+      "cc-given-name",
+      "cc-additional-name",
+      "cc-family-name",
+      "cc-number",
+      "cc-exp",
+      "cc-exp-month",
+      "cc-exp-year",
+      "cc-csc",
+      "cc-type",
+      "transaction-currency",
+      "transaction-amount",
+      "language",
+      "bday",
+      "bday-day",
+      "bday-month",
+      "bday-year",
+      "sex",
+      "url",
+      "photo",
+    ];
 
-      // personal info fields
-      const autofillFieldNames = [
-        "name",
-        "honorific-prefix",
-        "given-name",
-        "additional-name",
-        "family-name",
-        "honorific-suffix",
-        "nickname",
-        "username",
-        "new-password",
-        "current-password",
-        "one-time-code",
-        "organization-title",
-        "organization",
-        "street-address",
-        "address-line1",
-        "address-line2",
-        "address-line3",
-        "address-level4",
-        "address-level3",
-        "address-level2",
-        "address-level1",
-        "country",
-        "country-name",
-        "postal-code",
-        "cc-name",
-        "cc-given-name",
-        "cc-additional-name",
-        "cc-family-name",
-        "cc-number",
-        "cc-exp",
-        "cc-exp-month",
-        "cc-exp-year",
-        "cc-csc",
-        "cc-type",
-        "transaction-currency",
-        "transaction-amount",
-        "language",
-        "bday",
-        "bday-day",
-        "bday-month",
-        "bday-year",
-        "sex",
-        "url",
-        "photo",
-      ];
-      autofillFieldNames.forEach(hyphenatedName => {
-        let el = document.createElement('input');
-        el.setAttribute('id', hyphenatedName);
-        el.setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'));
-        el.setAttribute('autocomplete', `section-contact ${hyphenatedName}`);
+    // contact types
+    const contactTypes = [
+      'home',
+      'work',
+      'mobile',
+      'fax',
+      'pager',
+    ];
+      
+    // contact fields
+    const contactFieldNames = [
+      "tel",
+      "tel-country-code",
+      "tel-national",
+      "tel-area-code",
+      "tel-local",
+      "tel-local-prefix",
+      "tel-local-suffix",
+      "tel-extension",
+      "email",
+      "impp",
+    ];
 
-        if (hyphenatedName === 'url') el.setAttribute('type', 'url');
-        else if (hyphenatedName.includes('password')) el.setAttribute('type', 'password');
-        else if (hyphenatedName === 'bday') el.setAttribute('type', 'date');
-        else el.setAttribute('type', 'text');
+    // for easy creation/assignment of multiple attributes
+    function createElementWithAttributes(tagName, attrsObj) {
+      const el = document.createElement(tagName);
+      Object.assign(el, attrsObj);
+      return el;
+    }
+
+    // based on hyphenated field names... and wizardry.
+    function getInputType(fieldName) {
+      if (hyphenatedName === 'url') return 'url';
+      if (hyphenatedName.includes('password')) return 'password';
+      if (hyphenatedName === 'bday') return 'date';
+      return 'text';
+    }
+    
+    // make the form
+    const contactForm = createElementWithAttributes(
+      'form',
+      {
+        id: 'contact-form',
+        name: 'contact_form',
+        action: '#',
+        method: 'post',
+      }
+    );
+
+    // make the personal info fields
+    autofillFieldNames.forEach(hyphenatedName => {
+      let el = createElementWithAttributes(
+        'input',
+        {
+          type: getInputType(hyphenatedName),
+          id: hyphenatedName,
+          name: !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'),
+          autocomplete: `section-contact ${hyphenatedName}`,
+        }
+      );
+
+      contactForm.appendChild(el);
+    });
+
+    // make the contact fields
+    contactTypes.forEach(contactType => {
+      contactFieldNames.forEach(hyphenatedName => {
+        let el = createElementWithAttributes(
+          'input',
+          {
+            type: getInputType(hyphenatedName),
+            id: contactType+'-'+hyphenatedName,
+            name: !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'),
+            autocomplete: `section-contact ${contactType} ${hyphenatedName}`,
+          }
+        );
 
         contactForm.appendChild(el);
       });
+    });
 
-      // contact fields
-      const contactTypes = [
-        'home',
-        'work',
-        'mobile',
-        'fax',
-        'pager',
-      ];
-      const contactFieldNames = [
-        "tel",
-        "tel-country-code",
-        "tel-national",
-        "tel-area-code",
-        "tel-local",
-        "tel-local-prefix",
-        "tel-local-suffix",
-        "tel-extension",
-        "email",
-        "impp",
-      ];
-      contactTypes.forEach(contactType => {
-        contactFieldNames.forEach(hyphenatedName => {
-          let el = document.createElement('input');
-          el.setAttribute('id', hyphenatedName);
-          el.setAttribute('name', !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'));
-          el.setAttribute('autocomplete', `section-contact ${contactType} ${hyphenatedName}`);
-
-          if (hyphenatedName === 'url') el.setAttribute('type', 'url');
-          else if (hyphenatedName.includes('password')) el.setAttribute('type', 'password');
-          else if (hyphenatedName === 'bday') el.setAttribute('type', 'date');
-          else el.setAttribute('type', 'text');
-
-          contactForm.appendChild(el);
-        });
+    // place longer format response
+    const textArea = createElementWithAttributes(
+      'textarea',
+      {
+        id: 'form-body',
+        name: 'form_content',
+        minlength: '5',
+        maxlength: '1000',
+        placeholder: 'E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs...'
       });
-
-      // place longer format response
-      const textArea = document.createElement('textarea');
-      textArea.setAttribute('id', 'form-body');
-      textArea.setAttribute('name', 'form_content');
-      textArea.setAttribute('minlength', '5');
-      textArea.setAttribute('maxlength', '1000');
-      textArea.setAttribute('placeholder', 'E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs...');
-      contactForm.appendChild(textArea);
-
+      
+    contactForm.appendChild(textArea);
+    
+    window.onload = function () {
       // add the form
       document.getElementById('silly-form').appendChild(contactForm);
     };
