@@ -5,6 +5,7 @@
   <title>Collin Shaffer | GitHub</title>
   <script>
     // personal info fields
+    const autofillFieldTypes = ['', 'billing', 'shipping'];
     const autofillFieldNames = [
       "name",
       "honorific-prefix",
@@ -52,16 +53,8 @@
       "photo",
     ];
 
-    // contact types
-    const contactTypes = [
-      'home',
-      'work',
-      'mobile',
-      'fax',
-      'pager',
-    ];
-      
     // contact fields
+    const contactFieldTypes = ['', 'home', 'work', 'mobile', 'fax', 'pager'];
     const contactFieldNames = [
       "tel",
       "tel-country-code",
@@ -75,6 +68,9 @@
       "impp",
     ];
 
+    // webauthn
+    const webauthnOpts = ['', 'webauthn'];
+
     // for easy creation/assignment of multiple attributes
     function createElementWithAttributes(tagName, attrsObj) {
       const el = document.createElement(tagName);
@@ -82,14 +78,28 @@
       return el;
     }
 
-    // based on hyphenated field names... and wizardry.
+    // Returns an input tag's type attribute from a possibly hyphenated field name
     function getInputType(fieldName) {
       if (fieldName === 'url') return 'url';
       if (fieldName === 'bday') return 'date';
       if (fieldName.includes('password')) return 'password';
       return 'text';
     }
-    
+
+    // Returns an input tag's name attribute from a possibly hyphenated field name
+    function getInputName(fieldName) {
+      return !fieldName.includes('-')
+        ? fieldName
+        : fieldName.replace('-', '_');
+    }
+
+    // Returns a label for a possibly hyphenated field name
+    function getInputLabel(fieldName) {
+      return !fieldName.includes('-')
+        ? fieldName
+        : fieldName.replace('\-([a-z])\g', v => ' ' + v.toUpperCase());
+    }
+
     // make the form
     const contactForm = createElementWithAttributes(
       'form',
@@ -102,29 +112,40 @@
     );
 
     // make the personal info fields
-    autofillFieldNames.forEach(hyphenatedName => {
-      let el = createElementWithAttributes(
-        'input',
-        {
-          type: getInputType(hyphenatedName),
-          id: hyphenatedName,
-          name: !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'),
-          autocomplete: `section-contact ${hyphenatedName}`,
-        }
-      );
+    autofillFieldTypes.forEach(autofillFieldType => {
+      // first make the fieldset
+      let fieldSet = document.createElement('fieldset'),
+        legend = document.createElement('legend');
+      legend.innerHTML = getInputLabel(autofillFieldType);
+      fieldSet.appendChild(legend);
 
-      contactForm.appendChild(el);
+      // then add the elements
+      autofillFieldNames.forEach(hyphenatedName => {
+        let el = createElementWithAttributes(
+          'input',
+          {
+            type: getInputType(hyphenatedName),
+            id: autofillFieldType + '-' + hyphenatedName,
+            name: getInputName(hyphenatedName),
+            autocomplete: `section-personal ${autofillFieldType} ${hyphenatedName}`,
+          }
+        );
+
+        fieldSet.appendChild(el);
+      });
+
+      contactForm.appendChild(fieldSet);
     });
 
     // make the contact fields
-    contactTypes.forEach(contactType => {
+    contactFieldTypes.forEach(contactType => {
       contactFieldNames.forEach(hyphenatedName => {
         let el = createElementWithAttributes(
           'input',
           {
             type: getInputType(hyphenatedName),
-            id: contactType+'-'+hyphenatedName,
-            name: !hyphenatedName.includes('-') ? hyphenatedName : hyphenatedName.replace('-', '_'),
+            id: contactType + '-' + hyphenatedName,
+            name: getInputName(hyphenatedName),
             autocomplete: `section-contact ${contactType} ${hyphenatedName}`,
           }
         );
@@ -143,9 +164,9 @@
         maxlength: '1000',
         placeholder: 'E.g., Describe the reason for this communication, tell me about your childhood, complain wabout the weathert, explain in detail why it is you decided to sell all of your socks to frogs...'
       });
-      
+
     contactForm.appendChild(textArea);
-    
+
     window.onload = function () {
       // add the form
       document.getElementById('silly-form').appendChild(contactForm);
