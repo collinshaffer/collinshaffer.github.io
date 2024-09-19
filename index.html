@@ -100,6 +100,33 @@
         : fieldName.replace('\-([a-z])\g', v => ' ' + v.toUpperCase());
     }
 
+    function addInputSets(section, types, names) {
+      types.forEach(type => {
+        // first make the fieldset
+        let fieldSet = document.createElement('fieldset'),
+          legend = document.createElement('legend');
+        legend.innerHTML = getInputLabel(type ?? section);
+        fieldSet.appendChild(legend);
+
+        // then add the elements
+        names.forEach(name => {
+          let el = createElementWithAttributes(
+            'input',
+            {
+              type: getInputType(name),
+              id: type + '-' + name,
+              name: getInputName(name),
+              autocomplete: `section-${section} ${type} ${name}`,
+            }
+          );
+
+          fieldSet.appendChild(el);
+        });
+
+        contactForm.appendChild(fieldSet);
+      });
+    }
+
     // make the form
     const contactForm = createElementWithAttributes(
       'form',
@@ -111,50 +138,11 @@
       }
     );
 
-    // make the personal info fields
-    autofillFieldTypes.forEach(autofillFieldType => {
-      // first make the fieldset
-      let fieldSet = document.createElement('fieldset'),
-        legend = document.createElement('legend');
-      legend.innerHTML = getInputLabel(autofillFieldType);
-      fieldSet.appendChild(legend);
+    // add fields to form
+    addInputSets('personal', autofillFieldTypes, autofillFieldNames);
+    addInputSets('contact', contactFieldTypes, contactFieldNames);
 
-      // then add the elements
-      autofillFieldNames.forEach(hyphenatedName => {
-        let el = createElementWithAttributes(
-          'input',
-          {
-            type: getInputType(hyphenatedName),
-            id: autofillFieldType + '-' + hyphenatedName,
-            name: getInputName(hyphenatedName),
-            autocomplete: `section-personal ${autofillFieldType} ${hyphenatedName}`,
-          }
-        );
-
-        fieldSet.appendChild(el);
-      });
-
-      contactForm.appendChild(fieldSet);
-    });
-
-    // make the contact fields
-    contactFieldTypes.forEach(contactType => {
-      contactFieldNames.forEach(hyphenatedName => {
-        let el = createElementWithAttributes(
-          'input',
-          {
-            type: getInputType(hyphenatedName),
-            id: contactType + '-' + hyphenatedName,
-            name: getInputName(hyphenatedName),
-            autocomplete: `section-contact ${contactType} ${hyphenatedName}`,
-          }
-        );
-
-        contactForm.appendChild(el);
-      });
-    });
-
-    // place longer format response
+    // add a place for longer format response
     const textArea = createElementWithAttributes(
       'textarea',
       {
